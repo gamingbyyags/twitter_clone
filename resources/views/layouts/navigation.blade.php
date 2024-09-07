@@ -18,6 +18,11 @@
                     <x-nav-link :href="route('chirps.index')" :active="request()->routeIs('chirps.index')">
                         {{ __('Chirps') }}
                     </x-nav-link>
+                    @if(auth()->user()->is_admin)
+                    <x-nav-link :href="route('admin.show.users')" :active="request()->routeIs('admin.show.users')">
+                        {{ __('Users') }}
+                    </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -76,6 +81,11 @@
             <x-responsive-nav-link :href="route('chirps.index')" :active="request()->routeIs('chirps.index')">
                 {{ __('Chirps') }}
             </x-responsive-nav-link>
+            @if(auth()->user()->is_admin)
+            <x-responsive-nav-link :href="route('admin.show.users')" :active="request()->routeIs('admin.show.users')">
+                {{ __('Users') }}
+            </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

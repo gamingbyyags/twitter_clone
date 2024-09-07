@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ChirpController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -10,11 +11,23 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'isBanned'])->name('dashboard');
 
 Route::resource('chirps', ChirpController::class)
-->only(['index', 'store', 'edit', 'update'])
-->middleware(['auth', 'verified']);
+->only(['index', 'store', 'edit', 'update', 'destroy'])
+->middleware(['auth', 'verified', 'isBanned']);
+
+Route::get('/users', [AdminController::class, 'index'])
+->name('admin.show.users')
+->middleware(['auth', 'isAdmin']);
+
+Route::put('/users/{user}/block', [AdminController::class, 'block'])
+->name('users.block')
+->middleware(['auth', 'isAdmin']);
+
+Route::put('/users/{user}/unblock', [AdminController::class, 'unblock'])
+->name('users.unblock')
+->middleware(['auth', 'isAdmin']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
